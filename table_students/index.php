@@ -1,23 +1,19 @@
 <?php
 include 'db.php';
 
-// Pencarian
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Setup paginasi
 $limit = 5;
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $start = ($page - 1) * $limit;
 
-// Hitung total record
-$countSql = "SELECT COUNT(*) AS total FROM products WHERE name LIKE '%$search%'";
+$countSql = "SELECT COUNT(*) AS total FROM students WHERE name LIKE '%$search%'";
 $countResult = mysqli_query($conn, $countSql);
 $countRow = mysqli_fetch_assoc($countResult);
 $total = $countRow['total'];
 $pages = ceil($total / $limit);
 
-// Ambil data
-$sql = "SELECT * FROM products WHERE name LIKE '%$search%' LIMIT $start, $limit";
+$sql = "SELECT * FROM students WHERE name LIKE '%$search%' LIMIT $start, $limit";
 $result = mysqli_query($conn, $sql);
 ?>
 
@@ -26,14 +22,17 @@ $result = mysqli_query($conn, $sql);
   <button type='submit'>Cari</button>
 </form>
 
-<a href='add.php'>+ Tambah Produk Baru</a>
+<a href='add.php'>+ Tambah Siswa Baru</a>
 
 <table border='1' cellpadding='10'>
   <tr>
     <th>ID</th>
     <th>Nama</th>
-    <th>Harga</th>
-    <th>Gambar</th>
+    <th>Jenis Kelamin</th>
+    <th>Tanggal Lahir</th>
+    <th>Kelas</th>
+    <th>Gambar Profil</th>
+    <th>Alamat</th>
     <th>Aksi</th>
   </tr>
 
@@ -41,11 +40,14 @@ $result = mysqli_query($conn, $sql);
   <tr>
     <td><?php echo $row['id']; ?></td>
     <td><?php echo $row['name']; ?></td>
-    <td><?php echo $row['price']; ?></td>
-    <td><img src='uploads/<?php echo $row['image']; ?>' width='80'></td>
+    <td><?php echo $row['gender']; ?></td>
+    <td><?php echo $row['birth_date']; ?></td>
+    <td><?php echo $row['class']; ?></td>
+    <td><img src='uploads/<?php echo $row['profile_image']; ?>' width='80'></td>
+    <td><?php echo $row['address']; ?></td>
     <td>
       <a href='edit.php?id=<?php echo $row['id']; ?>'>Edit</a> |
-      <a href='delete.php?id=<?php echo $row['id']; ?>' onclick='return confirm("Apakah Anda yakin ingin menghapus data ini?");'>Hapus</a>
+      <a href='delete.php?id=<?php echo $row['id']; ?>' onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">Hapus</a>
     </td>
   </tr>
   <?php } ?>
